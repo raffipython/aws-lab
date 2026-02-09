@@ -28,7 +28,6 @@ locals {
 data "aws_availability_zones" "available" {}
 
 # Debian 12 (bookworm) official AMI via owner+name filter
-# (Works in most regions; if it fails in yours, tell me your region and I’ll adjust the filter.)
 data "aws_ami" "debian12" {
   most_recent = true
   owners      = ["136693071363"] # Debian Cloud official AWS account
@@ -237,7 +236,6 @@ resource "random_integer" "d_host" {
   max = local.host_max
 }
 
-
 locals {
   ip_a   = "10.0.10.${random_integer.a_host.result}"
   ip_b_a = "10.0.10.${random_integer.b_a_host.result}"
@@ -306,13 +304,25 @@ resource "aws_network_interface" "eni_d" {
   tags            = { Name = "${var.name_prefix}-eni-d" }
 }
 
+# Give Node A a public IP via Elastic IP associated to its ENI
+resource "aws_eip" "node_a" {
+  domain = "vpc"
+  tags   = { Name = "${var.name_prefix}-node-a-eip" }
+}
+
+resource "aws_eip_association" "node_a" {
+  allocation_id        = aws_eip.node_a.id
+  network_interface_id = aws_network_interface.eni_a.id
+
+  depends_on = [aws_instance.node_a]
+}
+
 # Instances
 resource "aws_instance" "node_a" {
-  ami                         = data.aws_ami.debian12.id
-  instance_type               = var.instance_type
-  key_name                    = aws_key_pair.this.key_name
-  user_data                   = local.user_data_common
-  associate_public_ip_address = true
+  ami           = data.aws_ami.debian12.id
+  instance_type = var.instance_type
+  key_name      = aws_key_pair.this.key_name
+  user_data     = local.user_data_common
 
   network_interface {
     network_interface_id = aws_network_interface.eni_a.id
