@@ -1,9 +1,9 @@
 locals {
   vpc_cidr = "10.0.0.0/16"
 
-  subnet_a_cidr = "10.10.10.0/24"
-  subnet_b_cidr = "10.20.20.0/24"
-  subnet_c_cidr = "10.30.30.0/24"
+  subnet_a_cidr = "10.0.10.0/24"
+  subnet_b_cidr = "10.0.20.0/24"
+  subnet_c_cidr = "10.0.30.0/24"
 
   # Random host octets: avoid .0, .1, .255, and common reserved-ish low IPs.
   host_min = 10
