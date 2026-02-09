@@ -239,12 +239,12 @@ resource "random_integer" "d_host" {
 
 
 locals {
-  ip_a   = "10.10.10.${random_integer.a_host.result}"
-  ip_b_a = "10.10.10.${random_integer.b_a_host.result}"
-  ip_b_b = "10.20.20.${random_integer.b_b_host.result}"
-  ip_c_b = "10.20.20.${random_integer.c_b_host.result}"
-  ip_c_c = "10.30.30.${random_integer.c_c_host.result}"
-  ip_d   = "10.30.30.${random_integer.d_host.result}"
+  ip_a   = "10.0.10.${random_integer.a_host.result}"
+  ip_b_a = "10.0.10.${random_integer.b_a_host.result}"
+  ip_b_b = "10.0.20.${random_integer.b_b_host.result}"
+  ip_c_b = "10.0.20.${random_integer.c_b_host.result}"
+  ip_c_c = "10.0.30.${random_integer.c_c_host.result}"
+  ip_d   = "10.0.30.${random_integer.d_host.result}"
 }
 
 # Cloud-init/user-data
